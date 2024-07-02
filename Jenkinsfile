@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Checkin') {
             steps {
                 echo 'Checking out code...'
                 // Add code to checkout from a version control system, e.g., Git
