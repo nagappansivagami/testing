@@ -1,27 +1,25 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage('Checkout') {
+        stage('Fetch Code') {
             steps {
-                git url: 'https://github.com/nagappansivagami/testing.git', branch: 'main'
+                git <your-github-repository>
             }
         }
-        stage('SonarQube Analysis') {
+        stage('Code Analysis') {
             environment {
-                scannerHome = tool 'SonarQube_scanner'
+                scannerHome = tool 'Sonar'
             }
             steps {
-                withSonarQubeEnv('server-sonar') {
-                    sh """
-                    ${scannerHome}/bin/sonar-scanner -X \
-                    -Dsonar.projectKey=testing-jenkins-project \
-                    -Dsonar.projectName=testing-jenkins-project \
-                    -Dsonar.language=java \
-                    -Dsonar.projectVersion=1.0 \
-                    -Dsonar.sources=src \
-                    -Dsonar.projectBaseDir=${WORKSPACE}
-                    """
+                script {
+                    withSonarQubeEnv('Sonar') {
+                        sh "${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=<project-key> \
+                            -Dsonar.projectName=<project-name> \
+                            -Dsonar.projectVersion=<project-version> \
+                            -Dsonar.sources=<project-path>"
+                    }
                 }
             }
         }
