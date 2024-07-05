@@ -14,7 +14,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('server-sonar') {
                     sh """
-                    ${scannerHome}/bin/sonar-scanner \
+                    ${scannerHome}/bin/sonar-scanner -X \
                     -Dsonar.projectKey=testing-jenkins-project \
                     -Dsonar.projectName=testing-jenkins-project \
                     -Dsonar.language=java \
