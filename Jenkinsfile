@@ -1,35 +1,47 @@
 pipeline {
     agent any
 
+    environment {
+        SONAR_SCANNER_HOME = tool name: 'SonarQube_scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        SONAR_URL = 'http://192.168.101.41:9000'
+    }
+
     stages {
-        stage('Check-out') {
+        stage('Checkout') {
             steps {
-                echo 'Checking out code...'
-                // git url: 'https://github.com/nagappansivagami/testing.git', branch: 'main'
+                git url: 'https://github.com/nagappansivagami/testing.git', branch: 'main'
             }
         }
-        stage('Build') {
+
+        stage('SonarQube Analysis') {
+            environment {
+                SONAR_TOKEN = credentials('your-sonarqube-token-id')
+            }
             steps {
-                echo 'Building the application...'
-                // sh 'make build'
+                script {
+                    def scannerHome = tool 'SonarQube_scanner'
+                    withSonarQubeEnv('server-sonar') {
+                        sh "${scannerHome}/bin/sonar-scanner " +
+                           "-Dsonar.host.url=${SONAR_URL} " +
+                           "-Dsonar.projectKey=testing-jenkins-project " +
+                           "-Dsonar.projectName=testing-jenkins-project " +
+                           "-Dsonar.language=java " +
+                           "-Dsonar.projectVersion=1.0 " +
+                           "-Dsonar.sources=src/main/java " +
+                           "-Dsonar.projectBaseDir=${env.WORKSPACE} " +
+                           "-Dsonar.login=${SONAR_TOKEN}"
+                    }
+                }
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // sh 'make test'
-            }
+    }
+
+    post {
+        failure {
+            echo 'Build failed!'
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application...'
-                // sh 'make deploy'
-            }
-        }
-        stage('Print Message') {
-            steps {
-                echo 'Hello, this is a single print statement in a Jenkins Pipeline!'
-            }
+        success {
+            echo 'Build succeeded!'
         }
     }
 }
