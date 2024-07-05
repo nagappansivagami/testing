@@ -15,7 +15,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             environment {
-                SONAR_TOKEN = credentials('sonar-token') // Update with your actual credentials ID
+                SONAR_TOKEN = credentials('sonar-token') // Ensure this matches the credential ID
             }
             steps {
                 script {
