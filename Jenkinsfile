@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Fetch Code') {
             steps {
-                git <your-github-repository>
+                git <https://github.com/nagappansivagami/testing.git>
             }
         }
         stage('Code Analysis') {
