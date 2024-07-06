@@ -1,0 +1,11 @@
+execution:
+  concurrency: 25
+  ramp-up: 1m
+  hold-for: 2m
+  scenarios:
+    quick-test:
+      requests:
+        - http:
+            url: "/github.com/nagappansivagami/sample-test.git"
+            method: GET
+            repeat: true
