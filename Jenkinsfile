@@ -27,10 +27,4 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://localhost:9000
                             '''
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+                    
